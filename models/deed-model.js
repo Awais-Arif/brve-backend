@@ -39,10 +39,7 @@ const deedSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  hashTags: {
-    type: String,
-    required: true
-  },
+  hashTags: [],
   createdAt: {
     type: Date,
     required: true
@@ -70,14 +67,14 @@ let upload = multer({
 }).single('image');
 
 
-module.exports.createDeed = (req , res) => {
+module.exports.createDeed = (req, res) => {
   upload(req, res, error => {
     if (error) {
       console.log(error);
-      res.status(500).json({status: 'Error', message: 'Error occurred while creating contract.'});
+      res.status(500).json({ status: 'Error', message: 'Error occurred while creating contract.' });
       return;
     }
-
+    let hashtagsList = JSON.parse(req.body.hashTags)
     const deed = new Deed({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -88,55 +85,78 @@ module.exports.createDeed = (req , res) => {
       title: req.body.title,
       podcast: req.body.podcast,
       whatsHappening: req.body.whatsHappening,
-      hashTags: req.body.hashTags,
+      hashTags: hashtagsList,
       createdAt: new Date(),
       updatedAt: new Date()
     });
 
-    deed.save((error, response)=> {
-      if(error) {
-        console.log (error)
-        res.status(500).json({success: false, message: 'Error occurred while creating deed.'});
+    deed.save((error, response) => {
+      if (error) {
+        console.log(error)
+        res.status(500).json({ success: false, message: 'Error occurred while creating deed.' });
         return;
       }
 
-      if(!error) {
-        res.status(200).json({success: true, message: 'Deed created successfully.', deed: response});
+      if (!error) {
+        res.status(200).json({ success: true, message: 'Deed created successfully.', deed: response });
       }
     });
   });
 }
 
-module.exports.updateDeed = (req , res) => {
-  Deed.findOneAndUpdate({_id: req.params.id}, req.body,{}, error => {
+module.exports.updateDeed = (req, res) => {
+  Deed.findOneAndUpdate({ _id: req.params.id }, req.body, {}, error => {
     if (error) {
-      res.status(500).json({success: false, message: 'Error occurred while updating details of deed.'});
+      res.status(500).json({ success: false, message: 'Error occurred while updating details of deed.' });
       return;
     }
 
     if (!error) {
-      res.status(200).json({success: true, message: 'Deed details updated successfully.'});
+      res.status(200).json({ success: true, message: 'Deed details updated successfully.' });
     }
   });
 }
 
-module.exports.getDeedByID = (req , res) => {
-  Deed.findById(req.params.id, req.body,{}, (error, response) => {
+module.exports.getDeedByID = (req, res) => {
+  Deed.findById(req.params.id, req.body, {}, (error, response) => {
     if (error) {
-      res.status(500).json({success: false, message: 'Error occurred while getting details of deed.'});
+      res.status(500).json({ success: false, message: 'Error occurred while getting details of deed.' });
       return;
     }
 
-    res.status(200).json({success: true, deed: response});
+    res.status(200).json({ success: true, deed: response });
   });
 }
 
 module.exports.getDeeds = async (req, res) => {
-  const deeds = await Deed.find({}).catch(() => {
-    return res.status(500).json({status: 'Error', message: 'Error occurred while getting deeds.'});
+  let limit = '';
+  let query = {}
+  let options = {}
+  if (req.query.sort) {
+    options = {
+      sort: { createdAt: -1 }
+    };
+  }
+
+  if (req.query.cardNumber) {
+    query = {
+      $and: [{ cardNumber: req.query.cardNumber }, { _id: { $ne: req.query.id } }]
+    }
+  }
+
+  if (req.query.limit) {
+    limit = +req.query.limit;
+  }
+  if (req.query.tag) {
+    query.hashTags = req.query.tag;
+  }
+
+
+  const deeds = await Deed.find(query).sort(options.sort).limit(limit).catch(() => {
+    return res.status(500).json({ status: 'Error', message: 'Error occurred while getting deeds.' });
   });
 
-  res.status(200).json({status: 'Success', deeds: deeds});
+  res.status(200).json({ status: 'Success', deeds: deeds });
 }
 
 /*module.exports.getContractsByUserId = (req, res) => {
