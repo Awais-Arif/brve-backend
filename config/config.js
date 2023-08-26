@@ -1,7 +1,8 @@
 const nodemailer = require("nodemailer");
 module.exports = {
   PORT: 5000,
-  mongoURL: 'mongodb://localhost:27017/BRVE_DATABASE',
+  // mongoURL: 'mongodb://localhost:27017/BRVE_DATABASE',
+  mongoURL: 'mongodb://127.0.0.1:27017/BRVE_DATABASE',
   transporter: nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -14,56 +15,56 @@ module.exports = {
   TOKEN_SECRET: 'BRVE',
   HASH_TAGS: [
     {
-      "label": "Connecting Strangers",
-      "value": "connectingstrangers"
+      "label": "#ConnectingStrangers",
+      "value": "#ConnectingStrangers"
     },
     {
-      "label": "Connecting Friends",
-      "value": "connectingfriends"
+      "label": "#ConnectingFriends",
+      "value": "#ConnectingFriends"
     },
     {
-      "label": "Connecting Family",
-      "value": "connectingfamily"
+      "label": "#ConnectingFamily",
+      "value": "#ConnectingFamily"
     },
     {
-      "label": "Leader",
-      "value": "leader"
+      "label": "#Leader",
+      "value": "#Leader"
     },
     {
-      "label": "Better Together",
-      "value": "bettertogether"
+      "label": "#BetterTogether",
+      "value": "#BetterTogether"
     },
     {
-      "label": "Inspiring",
-      "value": "inspiring"
+      "label": "#Inspiring",
+      "value": "#Inspiring"
     },
     {
-      "label": "Random Act Of Kindness",
-      "value": "randomactofkindness"
+      "label": "#RandomActOfKindness",
+      "value": "#RandomActOfKindness"
     },
     {
-      "label": "Big Impact",
-      "value": "bigimpact"
+      "label": "#BigImpact",
+      "value": "#BigImpact"
     },
     {
-      "label": "Mental Health",
-      "value": "mentalhealth"
+      "label": "#MentalHealth",
+      "value": "#MentalHealth"
     },
     {
-      "label": "Kindness Matters",
-      "value": "kindnessmatters"
+      "label": "#KindnessMatters",
+      "value": "#KindnessMatters"
     },
     {
-      "label": "Gratitude",
-      "value": "gratitude"
+      "label": "#Gratitude",
+      "value": "#Gratitude"
     },
     {
-      "label": "Support Local",
-      "value": "supportlocal"
+      "label": "#SupportLocal",
+      "value": "#SupportLocal"
     },
     {
-      "label": "Love Where You Live",
-      "value": "lovewhereyoulive"
+      "label": "#LoveWhereYouLive",
+      "value": "#LoveWhereYouLive"
     }
   ]
 };

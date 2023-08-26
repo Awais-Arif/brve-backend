@@ -23,7 +23,9 @@ mongoose.connect(config.mongoURL).then(async () => {
       await tag.save();
     }
   }
-});
+}).catch(error => {
+  console.log(error);
+})
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
