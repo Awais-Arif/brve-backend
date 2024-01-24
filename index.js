@@ -13,13 +13,11 @@ mongoose.connect(config.mongoURL).then(async () => {
   console.log(`Connected to DB: ${config.mongoURL}`);
 
   const hashtags = await HASHTAGS.find();
-  console.log(hashtags);
   if (hashtags && hashtags.length === 0) {
     const hashtags = config.HASH_TAGS;
 
     for (const hashtag of hashtags) {
       const tag = new HASHTAGS(hashtag);
-
       await tag.save();
     }
   }
